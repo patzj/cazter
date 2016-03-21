@@ -7,7 +7,7 @@
 </head>
 <body>
 	<header>
-		<h1>cazter.org</h1>
+		<h1>api.cazter.org</h1>
 	</header>
 	
 	<main>

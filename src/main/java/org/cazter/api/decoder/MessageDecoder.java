@@ -1,11 +1,12 @@
-package org.cazter.websocket.decoder;
+package org.cazter.api.decoder;
 
 import java.util.Date;
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
-import org.cazter.websocket.model.Message;
-import org.cazter.websocket.reader.MessageJsonReader;
+
+import org.cazter.api.model.Message;
+import org.cazter.api.reader.MessageJsonReader;
 
 /**
  * Decoder class specific for Message objects. This class decodes a JSON 

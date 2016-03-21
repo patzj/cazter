@@ -1,4 +1,4 @@
-package org.cazter.websocket.writer;
+package org.cazter.api.writer;
 
 import java.util.Set;
 import javax.json.Json;

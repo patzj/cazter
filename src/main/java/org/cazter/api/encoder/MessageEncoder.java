@@ -1,11 +1,12 @@
-package org.cazter.websocket.encoder;
+package org.cazter.api.encoder;
 
 import javax.json.Json;
 import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
-import org.cazter.websocket.model.Message;
-import org.cazter.websocket.writer.MessageJsonWriter;
+
+import org.cazter.api.model.Message;
+import org.cazter.api.writer.MessageJsonWriter;
 
 /**
  * Encoder class specific for Message objects. This class encodes Message 

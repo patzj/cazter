@@ -1,4 +1,4 @@
-package org.cazter.websocket.reader;
+package org.cazter.api.reader;
 
 import java.io.StringReader;
 import java.util.HashSet;

@@ -1,4 +1,4 @@
-package org.cazter.websocket.listener;
+package org.cazter.api.listener;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

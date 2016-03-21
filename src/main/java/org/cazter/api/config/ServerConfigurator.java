@@ -1,4 +1,4 @@
-package org.cazter.websocket.config;
+package org.cazter.api.config;
 
 import java.util.List;
 import javax.websocket.Extension;

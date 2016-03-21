@@ -1,4 +1,4 @@
-package org.cazter.websocket.model;
+package org.cazter.api.model;
 
 import java.io.Serializable;
 import java.util.Set;
