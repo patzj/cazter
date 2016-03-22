@@ -11,12 +11,12 @@ import javax.json.JsonArrayBuilder;
 public class MessageJsonWriter {
 	
 	/**
-	 * This method 
+	 * The method that is used to create a JSON array builder from a set 
+	 * of String values.
 	 * @param set - set of String values to be encoded
 	 * @return JsonArrayBuilder
 	 */
 	public JsonArrayBuilder createArrayBuilder(Set<String> set) {
-		
 		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
 		
 		for(String val : set) {

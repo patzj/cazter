@@ -9,7 +9,7 @@ import org.cazter.api.model.Message;
 import org.cazter.api.writer.MessageJsonWriter;
 
 /**
- * Encoder class specific for Message objects. This class encodes Message 
+ * the encoder class specific for Message objects. This class encodes Message 
  * object into a JSON data.
  * @author patzj
  */
@@ -28,7 +28,6 @@ public class MessageEncoder implements Encoder.Text<Message> {
 	 */
 	@Override
 	public String encode(Message message) throws EncodeException {
-		
 		MessageJsonWriter writer = new MessageJsonWriter();
 		
 		return Json.createObjectBuilder()

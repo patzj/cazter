@@ -16,17 +16,16 @@ import javax.websocket.DecodeException;
 public class MessageJsonReader {
 	
 	/**
-	 * This method checks if the data is a valid JSON for decoding.
+	 * The method that checks if the data is a valid JSON for decoding.
 	 * @param json - data to be checked for validity
 	 * @return boolean
 	 */
 	public boolean isValidJson(String json) {
-		
 		boolean flag = true;
 			
 		try {
 			Json.createReader(new StringReader(json)).readObject();
-		} catch(JsonException err) {
+		} catch(JsonException exception) {
 			flag = false;
 		}
 		
@@ -34,7 +33,7 @@ public class MessageJsonReader {
 	}
 
 	/**
-	 * This method is used to read a certain value from a JSON data.
+	 * The method that is used to read a certain value from a JSON data.
 	 * @param json - JSON data
 	 * @param key - value to be read
 	 * @return String
@@ -49,7 +48,7 @@ public class MessageJsonReader {
 	}
 	
 	/**
-	 * This method is used to read an array of values from a JSON data.
+	 * The method that is used to read an array of values from a JSON data.
 	 * @param json - JSON data
 	 * @param key - value to be read
 	 * @return Set<String>

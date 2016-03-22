@@ -1,7 +1,7 @@
 package org.cazter.api.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,12 +18,10 @@ public class Channel {
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="Id")
 	private int id;
-	@Column(name="Name")
-	private String name;
 	@Column(name="Origin")
 	private String origin;
 	@Transient
-	private Set<Session> sessions = new HashSet<Session>();
+	private Map<String, Session> sessions = new HashMap<String, Session>();
 	
 	public Channel() { }
 
@@ -35,14 +33,6 @@ public class Channel {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getOrigin() {
 		return origin;
 	}
@@ -51,11 +41,15 @@ public class Channel {
 		this.origin = origin;
 	}
 
-	public Set<Session> getSessions() {
+	public Map<String, Session> getSessions() {
 		return sessions;
 	}
 
-	public void setSessions(Set<Session> sessions) {
+	public void setSessions(Map<String, Session> sessions) {
 		this.sessions = sessions;
+	}
+	
+	public void addSession(String userId, Session session) {
+		sessions.put(userId, session);
 	}
 }

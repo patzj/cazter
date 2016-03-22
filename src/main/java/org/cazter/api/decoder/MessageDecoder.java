@@ -9,7 +9,7 @@ import org.cazter.api.model.Message;
 import org.cazter.api.reader.MessageJsonReader;
 
 /**
- * Decoder class specific for Message objects. This class decodes a JSON 
+ * The decoder class specific for Message objects. This class decodes a JSON 
  * data from client end points into a Message object.
  * @author patzj
  */
@@ -22,14 +22,13 @@ public class MessageDecoder implements Decoder.Text<Message> {
 	public void init(EndpointConfig config) { }
 
 	/**
-	 * This method do the decoding of JSON data from client end points into 
+	 * The method that do the decoding of JSON data from client end points into 
 	 * a Message object.
 	 * @param json - JSON data from client end point
 	 * @throws DecodeException
 	 */
 	@Override
 	public Message decode(String json) throws DecodeException {
-		
 		Message message = new Message();
 		MessageJsonReader reader = new MessageJsonReader();
 		
@@ -42,14 +41,13 @@ public class MessageDecoder implements Decoder.Text<Message> {
 	}
 
 	/**
-	 * This method checks of the data from the client end point is a valid 
+	 * The method that checks of the data from the client end point is a valid 
 	 * JSON data.
 	 * @param json - JSON data from client end point
 	 * @return boolean
 	 */
 	@Override
 	public boolean willDecode(String json) {
-		
 		MessageJsonReader reader = new MessageJsonReader();
 		return reader.isValidJson(json);
 	}
