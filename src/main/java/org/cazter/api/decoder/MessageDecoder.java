@@ -24,8 +24,8 @@ public class MessageDecoder implements Decoder.Text<Message> {
 	/**
 	 * The method that do the decoding of JSON data from client end points into 
 	 * a Message object.
-	 * @param json - JSON data from client end point
-	 * @throws DecodeException
+	 * @param json - JSON data from client end point.
+	 * @throws DecodeException if a decoding issue occur.
 	 */
 	@Override
 	public Message decode(String json) throws DecodeException {
@@ -43,7 +43,7 @@ public class MessageDecoder implements Decoder.Text<Message> {
 	/**
 	 * The method that checks of the data from the client end point is a valid 
 	 * JSON data.
-	 * @param json - JSON data from client end point
+	 * @param json - JSON data from client end point.
 	 * @return boolean
 	 */
 	@Override

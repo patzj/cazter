@@ -2,8 +2,11 @@ package org.cazter.api;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.EncodeException;
@@ -43,6 +46,8 @@ public class Server {
 				@PathParam("channelId") int channelId,
 				@PathParam("userId") String userId) {
 		
+		session.getUserProperties().put("userId", userId);
+		
 		try {
 			router = new Router(channelId, userId, session);
 		} catch(ChannelNotFoundException exception) {
@@ -58,22 +63,27 @@ public class Server {
 	
 	@OnMessage
 	public void message(Session session, Message message) {
+		System.out.println("Received: " + message.getContent());
+		
 		router.setMessage(message);
 		try {
 			router.send();
-		} catch (IOException | EncodeException e) {
-			e.printStackTrace();
+		} catch (IOException | EncodeException exception) {
+			exception.printStackTrace();
 		}
 	}
 	
 	@OnError
-	public void error(Session session, Throwable exception) {
-		
+	public void error(Session session, Throwable throwable) {
+		throwable.printStackTrace();
 	}
 	
 	@OnClose
 	public void close(Session session, CloseReason reason) {
-		
+		router.getChannel().removeSession(session
+				.getUserProperties()
+				.get("userId")
+				.toString());
 	}
 	
 	/**

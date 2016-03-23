@@ -3,8 +3,6 @@ package org.cazter.api.config;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import javax.websocket.HandshakeResponse;
-import javax.websocket.server.HandshakeRequest;
 import javax.websocket.server.ServerEndpointConfig;
 
 public class ServerConfigurator extends ServerEndpointConfig.Configurator {
@@ -15,7 +13,7 @@ public class ServerConfigurator extends ServerEndpointConfig.Configurator {
 	 * The method that checks the origin header values from connecting clients 
 	 * with the Set of origin header values contained in this class. The result 
 	 * will determine whether to accept clients or not.
-	 * @param originHeader - origin header value of connecting clients
+	 * @param originHeader - Origin header value of connecting clients.
 	 * @return boolean
 	 */
 	@Override
@@ -42,7 +40,7 @@ public class ServerConfigurator extends ServerEndpointConfig.Configurator {
 	
 	/**
 	 * Get method for the Set of origin header values contained in this class.
-	 * @return Set of origin header values
+	 * @return Set of origin header values.
 	 */
 	public static Set<String>getOriginHeaders() {
 		return originHeaders;

@@ -31,7 +31,7 @@ public class Router {
 	 * Router object constructor that takes three parameters.
 	 * @param channelId - Channel id of the Channel object to be associated 
 	 * with the Router object
-	 * @param userId - String value that identifies a Session object in a 
+	 * @param userId - String object that identifies a Session object in a 
 	 * Channel
 	 * @param session - Session object to be added to the Channel object
 	 */
@@ -79,6 +79,7 @@ public class Router {
 	 */
 	public void setMessage(Message message) {
 		this.message = message;
+		System.out.println("message set: " + message.getContent());
 	}
 	
 	/**
@@ -110,7 +111,7 @@ public class Router {
 		for(String recipient : recipients) {
 			Session session = sessions.get(recipient);
 			
-			if(session != null && session.isOpen()) {
+			if(session.isOpen()) {
 				sendQueue.offer(session);
 			}
 		}

@@ -12,9 +12,9 @@ public class MessageJsonWriter {
 	
 	/**
 	 * The method that is used to create a JSON array builder from a set 
-	 * of String values.
-	 * @param set - set of String values to be encoded
-	 * @return JsonArrayBuilder
+	 * of String objects.
+	 * @param set - Set of String objects to be encoded.
+	 * @return JsonArrayBuilder that represent a collection JSON property.
 	 */
 	public JsonArrayBuilder createArrayBuilder(Set<String> set) {
 		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();

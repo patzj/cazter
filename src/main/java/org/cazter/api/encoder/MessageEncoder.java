@@ -4,7 +4,6 @@ import javax.json.Json;
 import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
-
 import org.cazter.api.model.Message;
 import org.cazter.api.writer.MessageJsonWriter;
 
@@ -22,19 +21,22 @@ public class MessageEncoder implements Encoder.Text<Message> {
 	public void init(EndpointConfig config) { }
 
 	/**
-	 * @param message - Message object to be encoded into JSON data
-	 * @return String
-	 * @throws EncodeException
+	 * @param message - Message object to be encoded into JSON data.
+	 * @return String object formatted as JSON.
+	 * @throws EncodeException if an encoding issue occur.
 	 */
 	@Override
 	public String encode(Message message) throws EncodeException {
 		MessageJsonWriter writer = new MessageJsonWriter();
+		
+		System.out.println(message.getContent());
 		
 		return Json.createObjectBuilder()
 				.add("from", message.getFrom())
 				.add("to", writer.createArrayBuilder(message.getTo()))
 				.add("content", message.getContent())
 				.add("timestamp", message.getTimestamp())
+				.build()
 				.toString();
 	}
 }

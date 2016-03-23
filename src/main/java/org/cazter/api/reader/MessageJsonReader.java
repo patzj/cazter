@@ -17,7 +17,7 @@ public class MessageJsonReader {
 	
 	/**
 	 * The method that checks if the data is a valid JSON for decoding.
-	 * @param json - data to be checked for validity
+	 * @param json - Data to be checked for validity.
 	 * @return boolean
 	 */
 	public boolean isValidJson(String json) {
@@ -34,10 +34,10 @@ public class MessageJsonReader {
 
 	/**
 	 * The method that is used to read a certain value from a JSON data.
-	 * @param json - JSON data
-	 * @param key - value to be read
-	 * @return String
-	 * @throws DecodeException
+	 * @param json - JSON data.
+	 * @param key - Value to be read.
+	 * @return String object that represents a single data JSON property.
+	 * @throws DecodeException if a decoding issue occur.
 	 */
 	public String decodeJsonData(String json, String key) 
 			throws DecodeException {
@@ -49,20 +49,21 @@ public class MessageJsonReader {
 	
 	/**
 	 * The method that is used to read an array of values from a JSON data.
-	 * @param json - JSON data
-	 * @param key - value to be read
-	 * @return Set<String>
-	 * @throws DecodeException
+	 * @param json - JSON data.
+	 * @param key - value to be read.
+	 * @return Set of String values that represents a collection JSON property.
+	 * @throws DecodeException if a decoding issue occur.
 	 */
 	public Set<String> decodeJsonArrayData(String json, String key) 
 			throws DecodeException {
 		
+
 		Set<String> jsonData = new HashSet<String>();
 		JsonArray jsonArray = Json.createReader(new StringReader(json))
 				.readObject().getJsonArray(key);
 		
 		for(JsonValue jsonValue : jsonArray) {
-			jsonData.add(jsonValue.toString());
+			jsonData.add(jsonValue.toString().replace("\"", ""));
 		}
 		
 		return jsonData;
