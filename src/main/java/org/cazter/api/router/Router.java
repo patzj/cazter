@@ -21,6 +21,7 @@ public class Router {
 	
 	private Channel channel;
 	private Message message;
+	private Session session;
 	
 	/**
 	 * Router object constructor that takes no parameter.
@@ -39,6 +40,7 @@ public class Router {
 			throws ChannelNotFoundException {
 		
 		this.channel = Server.getChannels().get(channelId);
+		this.session = session;
 		
 		if(channel == null) {
 			throw new ChannelNotFoundException();
@@ -79,9 +81,25 @@ public class Router {
 	 */
 	public void setMessage(Message message) {
 		this.message = message;
-		System.out.println("message set: " + message.getContent());
 	}
 	
+	/**
+	 * Get method for the Session object currently associated with the Router 
+	 * object.
+	 * @return Session object associated with the Router object.
+	 */
+	public Session getSession() {
+		return session;
+	}
+
+	/**
+	 * Set method for the Session object of the Router object.
+	 * @param session - Session object to be associated with the Router
+	 */
+	public void setSession(Session session) {
+		this.session = session;
+	}
+
 	/**
 	 * Sends the encoded Message object to recipients specified by the Message 
 	 * object.
@@ -96,6 +114,8 @@ public class Router {
 				sendQueue.poll().getBasicRemote().sendObject(message);
 			}
 		}
+		
+		this.session.getBasicRemote().sendObject(message);
 	}
 	
 	/**

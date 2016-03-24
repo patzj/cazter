@@ -29,8 +29,6 @@ public class MessageEncoder implements Encoder.Text<Message> {
 	public String encode(Message message) throws EncodeException {
 		MessageJsonWriter writer = new MessageJsonWriter();
 		
-		System.out.println(message.getContent());
-		
 		return Json.createObjectBuilder()
 				.add("from", message.getFrom())
 				.add("to", writer.createArrayBuilder(message.getTo()))

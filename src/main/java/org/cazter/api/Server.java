@@ -63,8 +63,6 @@ public class Server {
 	
 	@OnMessage
 	public void message(Session session, Message message) {
-		System.out.println("Received: " + message.getContent());
-		
 		router.setMessage(message);
 		try {
 			router.send();
