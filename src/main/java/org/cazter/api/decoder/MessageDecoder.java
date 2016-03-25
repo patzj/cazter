@@ -4,7 +4,6 @@ import java.util.Date;
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
-
 import org.cazter.api.model.Message;
 import org.cazter.api.reader.MessageJsonReader;
 

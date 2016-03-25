@@ -2,12 +2,12 @@ package org.cazter.api.reader;
 
 import java.io.StringReader;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonException;
-import javax.json.JsonValue;
-import javax.websocket.DecodeException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  * A helper class for decoding JSON data.
@@ -37,14 +37,11 @@ public class MessageJsonReader {
 	 * @param json - JSON data.
 	 * @param key - Value to be read.
 	 * @return String object that represents a single data JSON property.
-	 * @throws DecodeException if a decoding issue occur.
 	 */
-	public String decodeJsonData(String json, String key) 
-			throws DecodeException {
+	public String decodeJsonData(String json, String key) {
 		
-		return Json.createReader(new StringReader(json))
-				.readObject()
-				.getString(key);
+		JSONObject jsonObject = new JSONObject(json);
+		return jsonObject.get(key).toString();
 	}
 	
 	/**
@@ -52,18 +49,17 @@ public class MessageJsonReader {
 	 * @param json - JSON data.
 	 * @param key - value to be read.
 	 * @return Set of String values that represents a collection JSON property.
-	 * @throws DecodeException if a decoding issue occur.
 	 */
-	public Set<String> decodeJsonArrayData(String json, String key) 
-			throws DecodeException {
+	public Set<String> decodeJsonArrayData(String json, String key) {
 		
-
 		Set<String> jsonData = new HashSet<String>();
-		JsonArray jsonArray = Json.createReader(new StringReader(json))
-				.readObject().getJsonArray(key);
+		JSONObject jsonObject = new JSONObject(json);
+		JSONArray jsonArray = jsonObject.getJSONArray(key);
+		Iterator<Object> iterator = jsonArray.iterator();
 		
-		for(JsonValue jsonValue : jsonArray) {
-			jsonData.add(jsonValue.toString().replace("\"", ""));
+		while(iterator.hasNext()) {
+			jsonData.add(iterator.next().toString());
+
 		}
 		
 		return jsonData;

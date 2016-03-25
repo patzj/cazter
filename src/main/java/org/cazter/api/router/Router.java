@@ -1,6 +1,7 @@
 package org.cazter.api.router;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -114,8 +115,6 @@ public class Router {
 				sendQueue.poll().getBasicRemote().sendObject(message);
 			}
 		}
-		
-		this.session.getBasicRemote().sendObject(message);
 	}
 	
 	/**
@@ -125,7 +124,8 @@ public class Router {
 	 */
 	private Queue<Session> createSendQueue() {
 		Set<String> recipients = message.getTo();
-		Queue<Session> sendQueue = new PriorityQueue<Session>();
+		Queue<Session> sendQueue = new PriorityQueue<Session>(10, 
+				new SessionComparator());
 		Map<String, Session> sessions = channel.getSessions();
 		
 		for(String recipient : recipients) {
@@ -136,6 +136,29 @@ public class Router {
 			}
 		}
 		
+		sendQueue.offer(this.session);
 		return sendQueue;
+	}
+	
+	/**
+	 * Private class that is used to override the default Comparator of the 
+	 * PriorityQueue.
+	 * @author patzj
+	 */
+	private class SessionComparator implements Comparator<Session> {
+
+		@Override
+		public int compare(Session session1, Session session2) {
+			String userId1 = session1
+					.getUserProperties()
+					.get("userId")
+					.toString();
+			String userId2 = session2
+					.getUserProperties()
+					.get("userId")
+					.toString();
+			
+			return userId1.compareTo(userId2);
+		}		
 	}
 }

@@ -1,14 +1,13 @@
 package org.cazter.api.encoder;
 
-import javax.json.Json;
 import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 import org.cazter.api.model.Message;
-import org.cazter.api.writer.MessageJsonWriter;
+import org.json.JSONObject;
 
 /**
- * the encoder class specific for Message objects. This class encodes Message 
+ * The encoder class specific for Message objects. This class encodes Message 
  * object into a JSON data.
  * @author patzj
  */
@@ -21,20 +20,20 @@ public class MessageEncoder implements Encoder.Text<Message> {
 	public void init(EndpointConfig config) { }
 
 	/**
+	 * The method that do the encoding of Message object from server end point 
+	 * into a JSON data.
 	 * @param message - Message object to be encoded into JSON data.
 	 * @return String object formatted as JSON.
 	 * @throws EncodeException if an encoding issue occur.
 	 */
 	@Override
 	public String encode(Message message) throws EncodeException {
-		MessageJsonWriter writer = new MessageJsonWriter();
+		JSONObject jsonObject = new JSONObject();
 		
-		return Json.createObjectBuilder()
-				.add("from", message.getFrom())
-				.add("to", writer.createArrayBuilder(message.getTo()))
-				.add("content", message.getContent())
-				.add("timestamp", message.getTimestamp())
-				.build()
-				.toString();
+		return jsonObject.put("from", message.getFrom())
+			.put("to", message.getTo())
+			.put("content", message.getContent())
+			.put("timestamp", message.getTimestamp())
+			.toString();
 	}
 }

@@ -1,8 +1,7 @@
 package org.cazter.api.writer;
 
 import java.util.Set;
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
+import org.json.JSONArray;
 
 /**
  * A helper class for encoding JSON data.
@@ -11,18 +10,16 @@ import javax.json.JsonArrayBuilder;
 public class MessageJsonWriter {
 	
 	/**
-	 * The method that is used to create a JSON array builder from a set 
-	 * of String objects.
+	 * The method that is used to create a JSON array from a set of String 
+	 * objects.
 	 * @param set - Set of String objects to be encoded.
-	 * @return JsonArrayBuilder that represent a collection JSON property.
+	 * @return JSONArray that represent a collection JSON property.
 	 */
-	public JsonArrayBuilder createArrayBuilder(Set<String> set) {
-		JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+	public JSONArray createArray(Set<String> set) {
 		
-		for(String val : set) {
-			jsonArrayBuilder.add(val);
-		}
-		
-		return jsonArrayBuilder;
+		JSONArray jsonArray = new JSONArray();
+		jsonArray.put(set);
+
+		return jsonArray;
 	}
 }
