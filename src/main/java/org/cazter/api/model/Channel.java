@@ -1,10 +1,9 @@
 package org.cazter.api.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -17,12 +16,13 @@ import javax.websocket.Session;
  */
 @Entity
 @Table(name="Channel")
-public class Channel {
+public class Channel implements Serializable{
 	
-	@Id @GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="Id")
-	private int id;
-	@Column(name="Origin")
+	private static final long serialVersionUID = 1L;
+	@Id
+	@Column(name="Id", nullable=false)
+	private String id;
+	@Column(name="Origin", nullable=false)
 	private String origin;
 	@Transient
 	private Map<String, Session> sessions = new HashMap<String, Session>();
@@ -34,17 +34,17 @@ public class Channel {
 
 	/**
 	 * Get method of the id instance variable.
-	 * @return int value of the id instance variable.
+	 * @return String value of the id instance variable in hex.
 	 */
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
 	/**
 	 * Set method of the id instance variable.
-	 * @param id - int value that represents the id of the Channel.
+	 * @param id - String value that represents the id of the Channel in hex.
 	 */
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

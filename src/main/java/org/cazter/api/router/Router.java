@@ -37,7 +37,7 @@ public class Router {
 	 * Channel
 	 * @param session - Session object to be added to the Channel object
 	 */
-	public Router(int channelId, String userId, Session session) 
+	public Router(String channelId, String userId, Session session) 
 			throws ChannelNotFoundException {
 		
 		this.channel = Server.getChannels().get(channelId);

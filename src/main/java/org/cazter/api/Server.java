@@ -38,12 +38,12 @@ import org.cazter.api.router.Router;
 		decoders={MessageDecoder.class})
 public class Server {
 
-	private static Map<Integer, Channel> channels;
+	private static Map<String, Channel> channels;
 	private Router router;
 	
 	@OnOpen
 	public void open(Session session, EndpointConfig config, 
-				@PathParam("channelId") int channelId,
+				@PathParam("channelId") String channelId,
 				@PathParam("userId") String userId) {
 		
 		session.getUserProperties().put("userId", userId);
@@ -90,14 +90,14 @@ public class Server {
 	 */
 	public static void initChannels() {
 		channels = Collections
-				.synchronizedMap(new HashMap<Integer, Channel>());
+				.synchronizedMap(new HashMap<String, Channel>());
 	}
 	
 	/**
 	 * Get method for the Map of Channel objects contained in this class.
 	 * @return Map of Channel objects
 	 */
-	public static Map<Integer, Channel> getChannels() {
+	public static Map<String, Channel> getChannels() {
 		return channels;
 	}
 }
