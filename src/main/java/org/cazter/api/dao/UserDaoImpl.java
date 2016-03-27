@@ -46,6 +46,21 @@ public class UserDaoImpl implements UserDao {
 		
 		return users;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> read(int offset, int limit) {
+		List<User> users;
+		
+		startSession();
+		Query query = session.createQuery("FROM User");
+		query.setFirstResult(offset);
+		query.setMaxResults(limit);
+		users = query.list();
+		endSession();
+		
+		return users;
+	}
 
 	@Override
 	public int update(User user) {
@@ -67,16 +82,13 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public int delete(User user) {
+	public int delete(int userId) {
 		int affectedRows;
 		
 		startSession();
 		Query query = session.createQuery("DELETE FROM User WHERE "
-				+ "userId = :userId OR username = :username OR "
-				+ "emailAddress = :emailAddress");
-		query.setInteger("userId", user.getUserId());
-		query.setString("username", user.getUsername());
-		query.setString("emailAddress", user.getEmailAddress());
+				+ "userId = :userId");
+		query.setInteger("userId", userId);
 		affectedRows = query.executeUpdate();
 		endSession();
 		

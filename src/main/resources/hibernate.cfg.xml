@@ -34,6 +34,7 @@
 
         <!-- Names the annotated entity class -->
         <mapping class="org.cazter.api.model.Channel"/>
+        <mapping class="org.cazter.api.model.User"/>
 
     </session-factory>
 

@@ -11,8 +11,9 @@ public interface UserDao {
 
 	public User create(User user);
 	public List<User> read();
+	public List<User> read(int offset, int limit);
 	public int update(User user);
-	public int delete(User user);
+	public int delete(int userId);
 	public User searchByUserId(int userId);
 	public User searchByUsername(String username);
 	public User	searchByEmailAddress(String emailAddress);

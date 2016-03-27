@@ -49,12 +49,36 @@ public class ChannelDaoImpl implements ChannelDao {
 	 * database.
 	 * @return List of Channel objects from the database.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Channel> read() {
+		List<Channel> channels;
+		
 		startSession();
 		Query query = session.createQuery("FROM Channel");
-		@SuppressWarnings("unchecked")
-		List<Channel> channels = query.list();
+		channels = query.list();
+		endSession();
+		
+		return channels;
+	}
+	
+	/**
+	 * The method that retrieves a list of persisted Channel objects from the 
+	 * database depending on offset and limit specified.
+	 * @param offset - index of the first record of the list to be returned.
+	 * @param limit - number of records to be returned.
+	 * @return List of Channel objects from the database.
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Channel> read(int offset, int limit) {
+		List<Channel> channels;
+		
+		startSession();
+		Query query = session.createQuery("FROM Channel");
+		query.setFirstResult(offset);
+		query.setMaxResults(limit);
+		channels = query.list();
 		endSession();
 		
 		return channels;
