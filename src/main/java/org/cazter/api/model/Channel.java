@@ -24,6 +24,8 @@ public class Channel implements Serializable{
 	private String id;
 	@Column(name="Origin", nullable=false)
 	private String origin;
+	@Column(name="OwnerId", nullable=false)
+	private int ownerId;
 	@Transient
 	private Map<String, Session> sessions = new HashMap<String, Session>();
 	
@@ -64,6 +66,22 @@ public class Channel implements Serializable{
 	 */
 	public void setOrigin(String origin) {
 		this.origin = origin;
+	}
+	
+	/**
+	 * Get method of the ownerId instance variable.
+	 * @return int value that represents the owner of the Channel.
+	 */
+	public int getOwnerId() {
+		return ownerId;
+	}
+
+	/**
+	 * Set method of the ownerId instance variable.
+	 * @param ownerId - int value that represents the owner of the Channel.
+	 */
+	public void setOwnerId(int ownerId) {
+		this.ownerId = ownerId;
 	}
 
 	/**

@@ -9,11 +9,11 @@ import org.cazter.api.model.User;
  */
 public interface UserDao {
 
-	public int create(User user);
+	public User create(User user);
 	public List<User> read();
 	public int update(User user);
-	public int delete(String username);
-	public User search(User user);
+	public int delete(User user);
+	public User searchByUserId(int userId);
 	public User searchByUsername(String username);
 	public User	searchByEmailAddress(String emailAddress);
 }
