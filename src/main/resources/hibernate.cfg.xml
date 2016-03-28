@@ -11,9 +11,13 @@
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <!-- property name="connection.url">jdbc:mysql://localhost:3306/cazter</property -->
-        <property name="connection.url">jdbc:mysql://56f666a389f5cf4c6400001f-patzj.rhcloud.com:42166</property>
+        <property name="connection.url">jdbc:mysql://${env.OPENSHIFT_MYSQL_DB_HOST}:${env.OPENSHIFT_MYSQL_DB_PORT}</property>
+        <!-- 
         <property name="connection.username">root</property>
         <property name="connection.password">sesame</property>
+         -->
+        <property name="connection.username">${env.OPENSHIFT_MYSQL_DB_USERNAME}</property>
+        <property name="connection.password">${env.OPENSHIFT_MYSQL_DB_PASSWORD}</property>
 
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>
