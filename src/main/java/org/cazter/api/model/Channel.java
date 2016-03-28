@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.websocket.Session;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Model class for the containment of Session objects.
@@ -16,6 +17,7 @@ import javax.websocket.Session;
  */
 @Entity
 @Table(name="Channel")
+@XmlRootElement
 public class Channel implements Serializable{
 	
 	private static final long serialVersionUID = 1L;

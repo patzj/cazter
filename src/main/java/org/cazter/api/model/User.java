@@ -1,6 +1,8 @@
 package org.cazter.api.model;
 
 import java.io.Serializable;
+
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,10 +10,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+@Cacheable
 @Table(name="User")
-// @XmlRootElement
+@XmlRootElement
 public class User implements Serializable {
 	
 	private static final long serialVersionUID = 1L;

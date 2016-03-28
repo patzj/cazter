@@ -5,8 +5,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import org.cazter.api.Server;
 import org.cazter.api.config.ServerConfigurator;
-import org.cazter.api.dao.ChannelDaoImpl;
 import org.cazter.api.model.Channel;
+import org.cazter.api.service.ChannelService;
 
 public class WebSocketContextListener implements ServletContextListener {
 
@@ -18,8 +18,8 @@ public class WebSocketContextListener implements ServletContextListener {
 		ServerConfigurator.initOriginHeaders();
 		Server.initChannels();
 		
-		ChannelDaoImpl channelDao = new ChannelDaoImpl();
-		List<Channel> channels = channelDao.read();
+		ChannelService channelService = new ChannelService();
+		List<Channel> channels = channelService.read();
 		
 		for(Channel channel : channels) {
 			Server.getChannels().put(channel.getId(), channel);

@@ -10,7 +10,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -68,13 +67,11 @@ public class UserResource {
 	@PUT
 	@Path("/{userId}")
 	public Response update(@PathParam("userId") int userId, 
-			User user, @Context UriInfo uriInfo) {
+			@Context UriInfo uriInfo, User user) {
 		
 		user.setUserId(userId);
 		userService.update(user);
-		URI uri = uriInfo.getAbsolutePathBuilder()
-				.path(String.valueOf(user.getUserId()))
-				.build();
+		URI uri = uriInfo.getAbsolutePath();
 		return Response.created(uri).build();
 	}
 	

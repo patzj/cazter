@@ -41,6 +41,7 @@ public class UserDaoImpl implements UserDao {
 		
 		startSession();
 		Query query = session.createQuery("FROM User");
+		query.setCacheable(true);
 		users = query.list();
 		endSession();
 		
@@ -56,6 +57,7 @@ public class UserDaoImpl implements UserDao {
 		Query query = session.createQuery("FROM User");
 		query.setFirstResult(offset);
 		query.setMaxResults(limit);
+		query.setCacheable(true);
 		users = query.list();
 		endSession();
 		
@@ -69,12 +71,13 @@ public class UserDaoImpl implements UserDao {
 		startSession();
 		Query query = session.createQuery("UPDATE User SET "
 				+ "username = :username, password = :password, "
-				+ "emailAddress = :emailAddress, accessLevel = :accessLevel" 
+				+ "emailAddress = :emailAddress, accessLevel = :accessLevel "
 				+ "WHERE userId = :userId");
-		query.setString("username", user.getUsername());
-		query.setString("password", user.getPassword());
-		query.setString("emailAddress", user.getEmailAddress());
-		query.setInteger("accessLevel", user.getAccessLevel());
+		query.setString("username", user.getUsername())
+				.setString("password", user.getPassword())
+				.setString("emailAddress", user.getEmailAddress())
+				.setInteger("accessLevel", user.getAccessLevel())
+				.setInteger("userId", user.getUserId());
 		affectedRows = query.executeUpdate();
 		endSession();
 		
@@ -89,6 +92,7 @@ public class UserDaoImpl implements UserDao {
 		Query query = session.createQuery("DELETE FROM User WHERE "
 				+ "userId = :userId");
 		query.setInteger("userId", userId);
+		query.setCacheable(true);
 		affectedRows = query.executeUpdate();
 		endSession();
 		
@@ -104,10 +108,11 @@ public class UserDaoImpl implements UserDao {
 		Query query = session.createQuery("FROM User WHERE "
 				+ "userId = :userId");
 		query.setInteger("userId", userId);
+		query.setCacheable(true);
 		users = query.list();
 		endSession();
 		
-		return users.get(0);
+		return (users.size() > 0) ? users.get(0) : null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -119,10 +124,11 @@ public class UserDaoImpl implements UserDao {
 		Query query = session.createQuery("FROM User WHERE "
 				+ "username = :username");
 		query.setString("username", username);
+		query.setCacheable(true);
 		users = query.list();
 		endSession();
 		
-		return users.get(0);
+		return (users.size() > 0) ? users.get(0) : null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -135,9 +141,10 @@ public class UserDaoImpl implements UserDao {
 				+ "emailAddress = :emailAddress");
 		query.setString("emailAddress", emailAddress);
 		users = query.list();
+		query.setCacheable(true);
 		endSession();
 		
-		return users.get(0);
+		return (users.size() > 0) ? users.get(0) : null;
 	}
 	
 	private void startSession() {
