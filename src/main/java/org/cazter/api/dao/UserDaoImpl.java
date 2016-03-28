@@ -18,6 +18,12 @@ public class UserDaoImpl implements UserDao {
 	
 	public UserDaoImpl() {
 		Configuration configuration = new Configuration().configure();
+		configuration.setProperty("connection.url", 
+				"jdbc:" + System.getenv("OPENSHIFT_MYSQL_DB_URL"))
+			.setProperty("connection.username", 
+					System.getenv("OPENSHIFT_MYSQL_DB_USERNAME"))
+			.setProperty("connection.password", 
+					System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD"));
 		StandardServiceRegistryBuilder serviceRegistryBuilder
 				= new StandardServiceRegistryBuilder();
 		serviceRegistryBuilder.applySettings(configuration.getProperties());
