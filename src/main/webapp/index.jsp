@@ -11,11 +11,7 @@
 	</header>
 	
 	<main>
-		<%
-			out.println(System.getenv("OPENSHIFT_MYSQL_DB_URL"));
-			out.println(System.getenv("OPENSHIFT_APP_DNS"));
-			out.println(System.getenv("OPENSHIFT_GEAR_DNS"));
-		%>
+		
 	</main>
 	
 	<footer>
