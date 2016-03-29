@@ -26,8 +26,9 @@ public class ChannelDaoImpl implements ChannelDao {
 	 */
 	public ChannelDaoImpl() {
 		Configuration configuration = new Configuration().configure();
-		configuration.setProperty("hibernate.connection.url", "jdbc:" 
-				+ System.getenv("OPENSHIFT_MYSQL_DB_URL")
+		configuration.setProperty("hibernate.connection.url", "jdbc:mysql://" 
+				+ System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":"
+				+ System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/"
 				+ System.getenv("OPENSHIFT_APP_NAME"))
 				.setProperty("hibernate.connection.username", 
 						System.getenv("OPENSHIFT_MYSQL_DB_USERNAME"))
