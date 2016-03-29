@@ -516,10 +516,12 @@
             </filters>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:1.2">
-            <!-- wsdl-host>${jboss.bind.address:127.0.0.1}</wsdl-host -->
+            <!-- for offline deployment 
+            <wsdl-host>${jboss.bind.address:127.0.0.1}</wsdl-host>
+            -->
             <!-- for online deployment -->
             <modify-wsdl-address>true</modify-wsdl-address>
-            <wsdl-host>${env.OPENSHIFT_APP_DNS}</wsdl-host>
+            <wsdl-host>${env.OPENSHIFT_GEAR_DNS}</wsdl-host>
             <wsdl-port>80</wsdl-port>
             <!-- -->
             <endpoint-config name="Standard-Endpoint-Config"/>
@@ -528,7 +530,9 @@
                     <handler name="RecordingHandler" class="org.jboss.ws.common.invocation.RecordingServerHandler"/>
                 </pre-handler-chain>
             </endpoint-config>
+            <!-- for offline deployment
             <client-config name="Standard-Client-Config"/>
+            -->
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:weld:2.0"/>
     </profile>
