@@ -25,7 +25,7 @@ import org.cazter.api.service.ChannelService;
 public class ChannelResource {
 
 	ChannelService channelService = new ChannelService();
-	/*
+	
 	@POST
 	public Response create(Channel channel, @Context UriInfo uriInfo) {
 		channelService.create(channel);
@@ -34,13 +34,13 @@ public class ChannelResource {
 				.build();
 		return Response.created(uri).build();
 	}
-	*/
+	
 	@GET
 	@Path("/live")
 	public List<Channel> readLive() {
 		return new ArrayList<Channel>(Server.getChannels().values());
 	}
-	/*
+	
 	@GET
 	@Path("/live/{channelId}")
 	public Channel searchByIdLive(@PathParam("channelId") String channelId) {
@@ -90,5 +90,5 @@ public class ChannelResource {
 		channelService.delete(channelId);
 		return Response.ok().build();
 	}
-	*/
+	
 }
