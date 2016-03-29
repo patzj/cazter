@@ -26,6 +26,13 @@ public class ChannelDaoImpl implements ChannelDao {
 	 */
 	public ChannelDaoImpl() {
 		Configuration configuration = new Configuration().configure();
+		configuration.setProperty("connection.url", "jdbc:" 
+				+ System.getenv("OPENSHIFT_MYSQL_DB_URL")
+				+ System.getenv("OPENSHIFT_APP_NAME"))
+				.setProperty("connection.username", 
+						System.getenv("OPENSHIFT_MYSQL_DB_USERNAME"))
+				.setProperty("connection.password", 
+						System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD"));
 		StandardServiceRegistryBuilder serviceRegistryBuilder 
 				= new StandardServiceRegistryBuilder();
 		serviceRegistryBuilder.applySettings(configuration.getProperties());
