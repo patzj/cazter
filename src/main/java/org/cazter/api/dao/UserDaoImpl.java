@@ -10,27 +10,17 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+@SuppressWarnings("unused")
 public class UserDaoImpl implements UserDao {
 
-	private SessionFactory sessionFactory;
+	private static SessionPool sessionPool;
+	private static SessionFactory sessionFactory;
 	private Session session;
 	private Transaction transaction;
 	
 	public UserDaoImpl() {
-		Configuration configuration = new Configuration().configure();
-		configuration.setProperty("hibernate.connection.url", "jdbc:mysql://" 
-				+ System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":"
-				+ System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/"
-				+ System.getenv("OPENSHIFT_APP_NAME"))
-				.setProperty("hibernate.connection.username", 
-						System.getenv("OPENSHIFT_MYSQL_DB_USERNAME"))
-				.setProperty("hibernate.connection.password", 
-						System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD"));
-		StandardServiceRegistryBuilder serviceRegistryBuilder
-				= new StandardServiceRegistryBuilder();
-		serviceRegistryBuilder.applySettings(configuration.getProperties());
-		ServiceRegistry serviceRegistry = serviceRegistryBuilder.build();
-		sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+		sessionPool = SessionPool.getInstance();
+		sessionFactory = sessionPool.getSessionFactory();
 	}
 	
 	@Override
