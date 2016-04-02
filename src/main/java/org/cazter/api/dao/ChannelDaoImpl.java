@@ -2,25 +2,19 @@ package org.cazter.api.dao;
 
 import java.util.List;
 import org.cazter.api.model.Channel;
-import org.hibernate.Query;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
 /**
  * Implementation class of the ChannelDao interface.
  * @author patzj
  */
-@SuppressWarnings("unused")
 public class ChannelDaoImpl implements ChannelDao {
 
 	private static SessionPool sessionPool;
 	private static SessionFactory sessionFactory;
-	private Session session;
-	private Transaction transaction;
 	
 	/**
 	 * ChannelDaoImpl object constructor that takes no parameters. The 
@@ -37,9 +31,18 @@ public class ChannelDaoImpl implements ChannelDao {
 	 */
 	@Override
 	public void create(Channel channel) {
-		startSession();
-		session.save(channel);
-		endSession();
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		
+		try {
+			transaction = session.beginTransaction();
+			session.save(channel);
+			transaction.commit();
+		} catch(HibernateException exception) {
+			rollbackTx(transaction);
+		} finally {
+			session.close();
+		}
 	}
 
 	/**
@@ -50,12 +53,19 @@ public class ChannelDaoImpl implements ChannelDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Channel> read() {
-		List<Channel> channels;
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		List<Channel> channels = null;
 		
-		startSession();
-		Query query = session.createQuery("FROM Channel");
-		channels = query.list();
-		endSession();
+		try {
+			transaction = session.getTransaction();
+			channels = session.createQuery("FROM Channel").list();
+			transaction.commit();
+		} catch(HibernateException exception) {
+			rollbackTx(transaction);
+		} finally {
+			session.close();
+		}
 		
 		return channels;
 	}
@@ -70,14 +80,22 @@ public class ChannelDaoImpl implements ChannelDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Channel> read(int offset, int limit) {
-		List<Channel> channels;
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		List<Channel> channels = null;
 		
-		startSession();
-		Query query = session.createQuery("FROM Channel");
-		query.setFirstResult(offset);
-		query.setMaxResults(limit);
-		channels = query.list();
-		endSession();
+		try {
+			transaction = session.getTransaction();
+			channels = session.createQuery("FROM Channel")
+					.setFirstResult(offset)
+					.setMaxResults(limit)
+					.list();
+			transaction.commit();
+		} catch(HibernateException exception) {
+			rollbackTx(transaction);
+		} finally {
+			session.close();
+		}
 		
 		return channels;
 	}
@@ -90,16 +108,24 @@ public class ChannelDaoImpl implements ChannelDao {
 	 */
 	@Override
 	public int update(Channel channel) {
-		int affectedRows;
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		int affectedRows = 0;;
 		
-		startSession();
-		Query query = session.createQuery("UPDATE Channel SET "
-				+ "origin = :origin WHERE id = :id");
-		query.setString("origin", channel.getOrigin());
-		query.setString("id", channel.getId());
-		affectedRows = query.executeUpdate();
-		endSession();
-		
+		try {
+			transaction = session.beginTransaction();
+			affectedRows = session.createQuery("UPDATE Channel SET "
+					+ "origin = :origin WHERE id = :id")
+					.setString("origin", channel.getOrigin())
+					.setString("id", channel.getId())
+					.executeUpdate();
+			transaction.commit();
+		} catch(HibernateException exception) {
+			rollbackTx(transaction);
+		} finally {
+			session.close();
+		}
+
 		return affectedRows;
 	}
 	
@@ -112,17 +138,24 @@ public class ChannelDaoImpl implements ChannelDao {
 	 */
 	@Override
 	public int delete(String channelId) {
-		int affectedRows;
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		int affectedRows = 0;
 		
-		startSession();
-		Query query = session.createQuery("DELETE FROM Channel WHERE "
-				+ "id = :id");
-		query.setString("id", channelId);
-		affectedRows = query.executeUpdate();
-		endSession();
+		try {
+			transaction = session.beginTransaction();
+			affectedRows = session
+					.createQuery("DELETE FROM Channel WHERE id = :id")
+					.setString("id", channelId)
+					.executeUpdate();
+			transaction.commit();
+		} catch(HibernateException e) {
+			rollbackTx(transaction);
+		} finally {
+			session.close();
+		}
 		
 		return affectedRows;
-		
 	}
 
 	/**
@@ -134,16 +167,22 @@ public class ChannelDaoImpl implements ChannelDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Channel searchById(String channelId) {
-		List<Channel> channels;
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		List<Channel> channels = null;
 		
-		startSession();
-		Query query = session.createQuery("FROM Channel WHERE "
-				+ "id = :id");
-		query.setString("id", channelId);
-		channels = query.list();
-		endSession();
+		try {
+			transaction = session.beginTransaction();
+			channels = session.createQuery("FROM Channel WHERE "
+					+ "id = :id").setString("id", channelId).list();
+			transaction.commit();
+		} catch(HibernateException exception) {
+			rollbackTx(transaction);
+		} finally {
+			session.close();
+		}
 		
-		return channels.get(0);
+		return (channels.size() > 0) ? channels.get(0) : null;
 	}
 
 	/**
@@ -155,33 +194,29 @@ public class ChannelDaoImpl implements ChannelDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Channel> searchByOwner(int ownerId) {
-		List<Channel> channels;
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		List<Channel> channels = null;
 		
-		startSession();
-		Query query = session.createQuery("FROM Channnel WHERE "
-				+ "ownerId = :ownerId");
-		query.setInteger("ownerId", ownerId);
-		channels = query.list();
-		endSession();
+		try {
+			transaction = session.beginTransaction();
+			channels = session.createQuery("FROM Channnel WHERE "
+					+ "ownerId = :ownerId")
+					.setInteger("ownerId", ownerId)
+					.list();
+			transaction.commit();
+		} catch(HibernateException exception) {
+			rollbackTx(transaction);
+		} finally {
+			session.close();
+		}
 		
 		return channels;
 	}
-
-	/**
-	 * The method that opens a Session object and begins a Transaction.
-	 */
-	private void startSession() {
-		session = sessionFactory.openSession();
-		transaction = session.beginTransaction();
-	}
 	
-	/**
-	 * The method that commits query to the Transaction and closes the 
-	 * Session object.
-	 */
-	private void endSession() {
-		transaction.commit();
-		session.flush();
-		session.close();
+	private void rollbackTx(Transaction transaction) {
+		if(transaction != null) {
+			transaction.rollback();
+		}
 	}
 }

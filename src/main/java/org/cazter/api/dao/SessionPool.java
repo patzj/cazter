@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import static org.cazter.api.dao.HibernateCfgConstants.*;
 
 public class SessionPool {
 
@@ -11,16 +12,28 @@ public class SessionPool {
 	private static SessionFactory sessionFactory;
 	
 	private void newSessionFactory() {
+		// Development/offline configuration.
 		Configuration configuration = new Configuration()
 				.configure()
-				.setProperty("hibernate.connection.url", "jdbc:mysql://" 
-						+ System.getenv("OPENSHIFT_MYSQL_DB_HOST") + ":"
-						+ System.getenv("OPENSHIFT_MYSQL_DB_PORT") + "/"
-						+ System.getenv("OPENSHIFT_APP_NAME"))
+				.setProperty("hibernate.connection.url", 
+						OFFLINE_DB_CONNECTION_URL)
 				.setProperty("hibernate.connection.username", 
-						System.getenv("OPENSHIFT_MYSQL_DB_USERNAME"))
+						OFFLINE_DB_CONNECTION_USERNAME)
 				.setProperty("hibernate.connection.password", 
-						System.getenv("OPENSHIFT_MYSQL_DB_PASSWORD"));
+						OFFLINE_DB_CONNECTION_PASSWORD);
+		
+		// Production/online configuration.
+		/*
+		Configuration configuration = new Configuration()
+				.configure()
+				.setProperty("hibernate.connection.url", 
+						OFFLINE_DB_CONNECTION_URL)
+				.setProperty("hibernate.connection.username", 
+						OFFLINE_DB_CONNECTION_USERNAME)
+				.setProperty("hibernate.connection.password", 
+						OFFLINE_DB_CONNECTION_PASSWORD);
+		*/
+		
 		StandardServiceRegistryBuilder serviceRegistryBuilder 
 				= new StandardServiceRegistryBuilder();
 		serviceRegistryBuilder.applySettings(configuration.getProperties());
