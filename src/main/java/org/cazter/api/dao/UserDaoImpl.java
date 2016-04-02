@@ -1,7 +1,10 @@
 package org.cazter.api.dao;
 
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import org.cazter.api.model.User;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,8 +18,9 @@ public class UserDaoImpl implements UserDao {
 
 	private static SessionPool sessionPool;
 	private static SessionFactory sessionFactory;
-	private Session session;
-	private Transaction transaction;
+	private final static Logger LOGGER 
+			= Logger.getLogger(UserDaoImpl.class.getName());
+			
 	
 	public UserDaoImpl() {
 		sessionPool = SessionPool.getInstance();
@@ -25,9 +29,19 @@ public class UserDaoImpl implements UserDao {
 	
 	@Override
 	public User create(User user) {
-		startSession();
-		session.save(user);
-		endSession();
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		
+		try {
+			transaction = session.beginTransaction();
+			session.save(user);
+			transaction.commit();
+		} catch(HibernateException exception) {
+			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
+		} finally {
+			session.close();
+		}
 		
 		return user;
 	}
@@ -35,13 +49,21 @@ public class UserDaoImpl implements UserDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> read() {
-		List<User> users;
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		List<User> users = null;
 		
-		startSession();
-		Query query = session.createQuery("FROM User");
-		query.setCacheable(true);
-		users = query.list();
-		endSession();
+		try {
+			transaction = session.beginTransaction();
+			users = session.createQuery("FROM User")
+					.setCacheable(true).list();
+			transaction.commit();
+		} catch(HibernateException exception) {
+			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
+		} finally {
+			session.close();
+		}
 		
 		return users;
 	}
@@ -49,50 +71,78 @@ public class UserDaoImpl implements UserDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> read(int offset, int limit) {
-		List<User> users;
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		List<User> users = null;
 		
-		startSession();
-		Query query = session.createQuery("FROM User");
-		query.setFirstResult(offset);
-		query.setMaxResults(limit);
-		query.setCacheable(true);
-		users = query.list();
-		endSession();
+		try {
+			transaction = session.beginTransaction();
+			users = session.createQuery("FROM User")
+					.setFirstResult(offset)
+					.setMaxResults(limit)
+					.setCacheable(true)
+					.list();
+			transaction.commit();
+		} catch(HibernateException exception) {
+			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
+		} finally {
+			session.close();
+		}
 		
 		return users;
 	}
 
 	@Override
 	public int update(User user) {
-		int affectedRows;
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		int affectedRows = 0;
 		
-		startSession();
-		Query query = session.createQuery("UPDATE User SET "
-				+ "username = :username, password = :password, "
-				+ "emailAddress = :emailAddress, accessLevel = :accessLevel "
-				+ "WHERE userId = :userId");
-		query.setString("username", user.getUsername())
-				.setString("password", user.getPassword())
-				.setString("emailAddress", user.getEmailAddress())
-				.setInteger("accessLevel", user.getAccessLevel())
-				.setInteger("userId", user.getUserId());
-		affectedRows = query.executeUpdate();
-		endSession();
+		try {
+			transaction = session.beginTransaction();
+			affectedRows = session.createQuery("UPDATE User SET "
+					+ "username = :username, password = :password, "
+					+ "emailAddress = :emailAddress, accessLevel "
+					+ "= :accessLevel WHERE userId = :userId")
+					.setString("username", user.getUsername())
+					.setString("password", user.getPassword())
+					.setString("emailAddress", user.getEmailAddress())
+					.setInteger("accessLevel", user.getAccessLevel())
+					.setInteger("userId", user.getUserId())
+					.setCacheable(true)
+					.executeUpdate();
+			transaction.commit();
+		} catch(HibernateException exception) {
+			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
+		} finally {
+			session.close();
+		}
 		
 		return affectedRows;
 	}
 
 	@Override
 	public int delete(int userId) {
-		int affectedRows;
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		int affectedRows = 0;
 		
-		startSession();
-		Query query = session.createQuery("DELETE FROM User WHERE "
-				+ "userId = :userId");
-		query.setInteger("userId", userId);
-		query.setCacheable(true);
-		affectedRows = query.executeUpdate();
-		endSession();
+		try {
+			transaction = session.beginTransaction();
+			affectedRows = session.createQuery("DELETE FROM User WHERE "
+					+ "userId = :userId")
+					.setInteger("userId", userId)
+					.setCacheable(true)
+					.executeUpdate();
+			transaction.commit();
+		} catch(HibernateException exception) {
+			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
+		} finally {
+			session.close();
+		}
 		
 		return affectedRows;
 	}
@@ -100,15 +150,24 @@ public class UserDaoImpl implements UserDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public User searchByUserId(int userId) {
-		List<User> users;
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		List<User> users = null;
 		
-		startSession();
-		Query query = session.createQuery("FROM User WHERE "
-				+ "userId = :userId");
-		query.setInteger("userId", userId);
-		query.setCacheable(true);
-		users = query.list();
-		endSession();
+		try {
+			transaction = session.beginTransaction();
+			users = session.createQuery("FROM User WHERE "
+					+ "userId = :userId")
+					.setInteger("userId", userId)
+					.setCacheable(true)
+					.list();
+			transaction.commit();
+		} catch (HibernateException exception) {
+			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
+		} finally {
+			session.close();
+		}
 		
 		return (users.size() > 0) ? users.get(0) : null;
 	}
@@ -116,15 +175,24 @@ public class UserDaoImpl implements UserDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public User searchByUsername(String username) {
-		List<User> users;
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		List<User> users = null;
 		
-		startSession();
-		Query query = session.createQuery("FROM User WHERE "
-				+ "username = :username");
-		query.setString("username", username);
-		query.setCacheable(true);
-		users = query.list();
-		endSession();
+		try {
+			transaction = session.beginTransaction();
+			users = session.createQuery("FROM User WHERE "
+					+ "username = :username")
+					.setString("username", username)
+					.setCacheable(true)
+					.list();
+			transaction.commit();
+		} catch(HibernateException exception) {
+			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
+		} finally {
+			session.close();
+		}
 		
 		return (users.size() > 0) ? users.get(0) : null;
 	}
@@ -132,28 +200,31 @@ public class UserDaoImpl implements UserDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public User searchByEmailAddress(String emailAddress) {
-		List<User> users;
+		Session session = sessionFactory.openSession();
+		Transaction transaction = null;
+		List<User> users = null;
 		
-		startSession();
-		Query query = session.createQuery("FROM User WHERE "
-				+ "emailAddress = :emailAddress");
-		query.setString("emailAddress", emailAddress);
-		users = query.list();
-		query.setCacheable(true);
-		endSession();
+		try {
+			transaction = session.beginTransaction();
+			users = session.createQuery("FROM User WHERE "
+				+ "emailAddress = :emailAddress")
+				.setString("emailAddress", emailAddress)
+				.setCacheable(true)
+				.list();
+			transaction.commit();
+		} catch(HibernateException exception) {
+			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
+		} finally {
+			session.close();
+		}
 		
 		return (users.size() > 0) ? users.get(0) : null;
 	}
 	
-	private void startSession() {
-		session = sessionFactory.openSession();
-		transaction = session.beginTransaction();
+	private void rollbackTx(Transaction transaction) {
+		if(transaction != null) {
+			transaction.rollback();
+		}
 	}
-	
-	private void endSession() {
-		transaction.commit();
-		session.flush();
-		session.close();
-	}
-
-}
+ }

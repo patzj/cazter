@@ -1,6 +1,8 @@
 package org.cazter.api.dao;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.cazter.api.model.Channel;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -12,9 +14,11 @@ import org.hibernate.Transaction;
  * @author patzj
  */
 public class ChannelDaoImpl implements ChannelDao {
-
+	
 	private static SessionPool sessionPool;
 	private static SessionFactory sessionFactory;
+	private final static Logger LOGGER 
+			= Logger.getLogger(UserDao.class.getName());;
 	
 	/**
 	 * ChannelDaoImpl object constructor that takes no parameters. The 
@@ -30,7 +34,7 @@ public class ChannelDaoImpl implements ChannelDao {
 	 * @param channel - Channel object to be persisted.
 	 */
 	@Override
-	public void create(Channel channel) {
+	public Channel create(Channel channel) {
 		Session session = sessionFactory.openSession();
 		Transaction transaction = null;
 		
@@ -40,9 +44,12 @@ public class ChannelDaoImpl implements ChannelDao {
 			transaction.commit();
 		} catch(HibernateException exception) {
 			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
 		} finally {
 			session.close();
 		}
+		
+		return channel;
 	}
 
 	/**
@@ -58,11 +65,13 @@ public class ChannelDaoImpl implements ChannelDao {
 		List<Channel> channels = null;
 		
 		try {
-			transaction = session.getTransaction();
-			channels = session.createQuery("FROM Channel").list();
+			transaction = session.beginTransaction();
+			channels = session.createQuery("FROM Channel")
+					.setCacheable(true).list();
 			transaction.commit();
 		} catch(HibernateException exception) {
 			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
 		} finally {
 			session.close();
 		}
@@ -89,10 +98,12 @@ public class ChannelDaoImpl implements ChannelDao {
 			channels = session.createQuery("FROM Channel")
 					.setFirstResult(offset)
 					.setMaxResults(limit)
+					.setCacheable(true)
 					.list();
 			transaction.commit();
 		} catch(HibernateException exception) {
 			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
 		} finally {
 			session.close();
 		}
@@ -118,10 +129,12 @@ public class ChannelDaoImpl implements ChannelDao {
 					+ "origin = :origin WHERE id = :id")
 					.setString("origin", channel.getOrigin())
 					.setString("id", channel.getId())
+					.setCacheable(true)
 					.executeUpdate();
 			transaction.commit();
 		} catch(HibernateException exception) {
 			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
 		} finally {
 			session.close();
 		}
@@ -147,10 +160,12 @@ public class ChannelDaoImpl implements ChannelDao {
 			affectedRows = session
 					.createQuery("DELETE FROM Channel WHERE id = :id")
 					.setString("id", channelId)
+					.setCacheable(true)
 					.executeUpdate();
 			transaction.commit();
-		} catch(HibernateException e) {
+		} catch(HibernateException exception) {
 			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
 		} finally {
 			session.close();
 		}
@@ -174,10 +189,13 @@ public class ChannelDaoImpl implements ChannelDao {
 		try {
 			transaction = session.beginTransaction();
 			channels = session.createQuery("FROM Channel WHERE "
-					+ "id = :id").setString("id", channelId).list();
+					+ "id = :id").setString("id", channelId)
+					.setCacheable(true)
+					.list();
 			transaction.commit();
 		} catch(HibernateException exception) {
 			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
 		} finally {
 			session.close();
 		}
@@ -203,10 +221,12 @@ public class ChannelDaoImpl implements ChannelDao {
 			channels = session.createQuery("FROM Channnel WHERE "
 					+ "ownerId = :ownerId")
 					.setInteger("ownerId", ownerId)
+					.setCacheable(true)
 					.list();
 			transaction.commit();
 		} catch(HibernateException exception) {
 			rollbackTx(transaction);
+			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
 		} finally {
 			session.close();
 		}
@@ -214,6 +234,10 @@ public class ChannelDaoImpl implements ChannelDao {
 		return channels;
 	}
 	
+	/**
+	 * A utility method that rolls back a Transaction object.
+	 * @param transaction - Transaction object to be rolled back.
+	 */
 	private void rollbackTx(Transaction transaction) {
 		if(transaction != null) {
 			transaction.rollback();

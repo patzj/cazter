@@ -9,7 +9,7 @@ import org.cazter.api.model.Channel;
  */
 public interface ChannelDao {
 
-	public void create(Channel channel);
+	public Channel create(Channel channel);
 	public List<Channel> read();
 	public List<Channel> read(int offset, int limit);
 	public int update(Channel channel);
