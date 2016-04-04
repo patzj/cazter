@@ -8,6 +8,8 @@ import org.cazter.api.config.ServerConfigurator;
 import org.cazter.api.model.Channel;
 import org.cazter.api.service.ChannelService;
 
+
+@SuppressWarnings("unused")
 public class WebSocketContextListener implements ServletContextListener {
 
 	@Override

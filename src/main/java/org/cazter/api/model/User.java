@@ -24,11 +24,11 @@ public class User implements Serializable {
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="UserId", nullable=false)
 	private int userId;
-	@Column(name="Username", nullable=false)
+	@Column(name="Username", nullable=false, unique=true)
 	private String username;
 	@Column(name="Password", nullable=false)
 	private String password;
-	@Column(name="EmailAddress", nullable=false)
+	@Column(name="EmailAddress", nullable=false, unique=true)
 	private String emailAddress;
 	@Column(name="AccessLevel", nullable=false)
 	private int accessLevel;

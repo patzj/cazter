@@ -38,6 +38,7 @@ public class UserDaoImpl implements UserDao {
 			transaction.commit();
 		} catch(HibernateException exception) {
 			rollbackTx(transaction);
+			user = null;
 			LOGGER.log(Level.SEVERE, exception.getMessage(), exception);
 		} finally {
 			session.close();

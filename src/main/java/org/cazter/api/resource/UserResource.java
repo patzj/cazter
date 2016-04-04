@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import org.cazter.api.model.User;
 import org.cazter.api.service.UserService;
@@ -22,7 +23,11 @@ import org.cazter.api.service.UserService;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
 	
-	private UserService userService = new UserService();
+	private UserService userService;
+	
+	public UserResource() {
+		userService = new UserService();
+	}
 	
 	@POST
 	public Response create(User user, @Context UriInfo uriInfo) {
@@ -72,13 +77,20 @@ public class UserResource {
 		user.setUserId(userId);
 		userService.update(user);
 		URI uri = uriInfo.getAbsolutePath();
-		return Response.created(uri).build();
+		
+		// 204 No Content
+		return Response
+				.status(Status.NO_CONTENT)
+				.header("Location", uri)
+				.build();
 	}
 	
 	@DELETE
 	@Path("/{userId}")
 	public Response delete(@PathParam("userId") int userId) {
 		userService.delete(userId);
-		return Response.ok().build();
+		
+		// 204 No Content
+		return Response.noContent().build();
 	}
 }

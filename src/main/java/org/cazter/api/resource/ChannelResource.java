@@ -24,7 +24,11 @@ import org.cazter.api.service.ChannelService;
 @Produces(MediaType.APPLICATION_JSON)
 public class ChannelResource {
 
-	ChannelService channelService = new ChannelService();
+	ChannelService channelService;
+	
+	public ChannelResource() {
+		channelService = new ChannelService();
+	}
 	
 	@POST
 	public Response create(Channel channel, @Context UriInfo uriInfo) {
