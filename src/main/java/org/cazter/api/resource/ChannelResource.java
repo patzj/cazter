@@ -2,7 +2,11 @@ package org.cazter.api.resource;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import javax.websocket.Session;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -43,6 +47,26 @@ public class ChannelResource {
 	@Path("/live")
 	public List<Channel> readLive() {
 		return new ArrayList<Channel>(Server.getChannels().values());
+	}
+	
+	@GET
+	@Path("/live/{channelId}/users")
+	public List<String> readLive(@PathParam("channelId") String channelId) {
+		Channel channel = Server.getChannels().get(channelId);
+		Map<String, Session> sessions = channel.getSessions();
+		Iterator<Entry<String, Session>> iterator 
+				= sessions.entrySet().iterator();
+		Session session;
+		String userId;
+		List<String> users = new ArrayList<String>();
+		
+		while(iterator.hasNext()) {
+			session = iterator.next().getValue();
+			userId = (String) session.getUserProperties().get("userId");
+			users.add(userId);
+		}
+		
+		return users;
 	}
 	
 	@GET
