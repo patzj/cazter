@@ -53,7 +53,7 @@ public class ChannelDaoImpl implements ChannelDao {
 	}
 
 	/**
-	 * The method that retrieves all the persisted Database objects from the 
+	 * The method that retrieves all the persistent Database objects from the 
 	 * database.
 	 * @return List of Channel objects from the database.
 	 */
@@ -80,7 +80,7 @@ public class ChannelDaoImpl implements ChannelDao {
 	}
 	
 	/**
-	 * The method that retrieves a list of persisted Channel objects from the 
+	 * The method that retrieves a list of persistent Channel objects from the 
 	 * database depending on offset and limit specified.
 	 * @param offset - index of the first record of the list to be returned.
 	 * @param limit - number of records to be returned.
@@ -112,7 +112,7 @@ public class ChannelDaoImpl implements ChannelDao {
 	}
 
 	/**
-	 * The method that updates a specific persisted Channel object. 
+	 * The method that updates a specific persistent Channel object. 
 	 * @param channel - Channel object to be updated.
 	 * @return int value that represents the affected database rows after 
 	 * the update.
@@ -143,7 +143,7 @@ public class ChannelDaoImpl implements ChannelDao {
 	}
 	
 	/**
-	 * The method that deletes a specific persisted Channel object.
+	 * The method that deletes a specific persistent Channel object.
 	 * @param channelId - Id of the Channel object to be deleted from the 
 	 * database.
 	 * @return int value that represent the affected database rows after 
@@ -174,7 +174,7 @@ public class ChannelDaoImpl implements ChannelDao {
 	}
 
 	/**
-	 * The method that retrieves a specific persisted Channel object.
+	 * The method that retrieves a specific persistent Channel object.
 	 * @param channelId - Id of the Channel object to be retrieved from the 
 	 * database.
 	 * @return Channel object from the database.
@@ -204,7 +204,7 @@ public class ChannelDaoImpl implements ChannelDao {
 	}
 
 	/**
-	 * The method that retrieves a list of persisted Channel objects based 
+	 * The method that retrieves a list of persistent Channel objects based 
 	 * on the Id of the owner.
 	 * @param owerId - If of the Channel owner
 	 * @return List of Channels owned by the specified owner.

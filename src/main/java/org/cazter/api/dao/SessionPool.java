@@ -6,12 +6,22 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import static org.cazter.api.dao.HibernateCfgConstants.*;
 
+/**
+ * Container class for SessionFactory object that implements a Singleton 
+ * pattern.
+ * @author patzj
+ */
 public class SessionPool {
 
 	private static SessionPool sessionPoll = null;
 	private static SessionFactory sessionFactory;
 	
-	private void newSessionFactory() {
+	/**
+	 * Session object private constructor that takes no arguments. The 
+	 * method that initializes the SessionFactory object contained in this 
+	 * class.  
+	 */
+	private void SessionPool() {
 		// Development/offline configuration.
 		Configuration configuration = new Configuration()
 				.configure()
@@ -41,15 +51,25 @@ public class SessionPool {
 		sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 	}
 	
+	/**
+	 * Static method that returns an instance of SessionPool. If SessionPool 
+	 * instance is null, this method creates an instance of SessionPool and 
+	 * returns it. This method also instantiates a SessionFactory object.
+	 * @return SessionPool object.
+	 */
 	public static SessionPool getInstance() {
 		if(sessionPoll == null) {
 			sessionPoll = new SessionPool();
-			sessionPoll.newSessionFactory();
 		}
 		
 		return sessionPoll;
 	}
 	
+	/**
+	 * The method that returns the SessionFactory object of the SessionPool 
+	 * class.
+	 * @return SessionFactory object.
+	 */
 	public SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}

@@ -12,7 +12,8 @@ import javax.websocket.Session;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Model class for the containment of Session objects.
+ * Model class for the containing Session objects. This class limits the 
+ * scope of the data that traverses the server.
  * @author patzj
  */
 @Entity
