@@ -18,6 +18,10 @@ import javax.ws.rs.core.UriInfo;
 import org.cazter.api.model.User;
 import org.cazter.api.service.UserService;
 
+/**
+ * Resource class that handles User resource requests from clients.
+ * @author patzj
+ */
 @Path("/users")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -25,6 +29,10 @@ public class UserResource {
 	
 	private UserService userService;
 	
+	/**
+	 * UserResource object constructor that takes no parameters. This class 
+	 * initializes the UserSerice.
+	 */
 	public UserResource() {
 		userService = new UserService();
 	}

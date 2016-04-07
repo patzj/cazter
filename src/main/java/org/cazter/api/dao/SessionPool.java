@@ -21,7 +21,7 @@ public class SessionPool {
 	 * method that initializes the SessionFactory object contained in this 
 	 * class.  
 	 */
-	private void SessionPool() {
+	private SessionPool() {
 		// Development/offline configuration.
 		Configuration configuration = new Configuration()
 				.configure()

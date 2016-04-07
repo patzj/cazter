@@ -38,7 +38,7 @@ public class User implements Serializable {
 	private int accessLevel;
 	
 	/**
-	 * User object constructor that takes no arguments.
+	 * User object constructor that takes no parameters.
 	 */
 	public User() { }
 	

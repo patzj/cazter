@@ -13,6 +13,10 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+/**
+ * Implementation class of UserDao interface.
+ * @author patzj
+ */
 @SuppressWarnings("unused")
 public class UserDaoImpl implements UserDao {
 
@@ -22,11 +26,19 @@ public class UserDaoImpl implements UserDao {
 			= Logger.getLogger(UserDaoImpl.class.getName());
 			
 	
+	/**
+	 * UserDaoImpl object constructor that takes no parameters. The 
+	 * method that initializes the SessionFactory object.
+	 */
 	public UserDaoImpl() {
 		sessionPool = SessionPool.getInstance();
 		sessionFactory = sessionPool.getSessionFactory();
 	}
 	
+	/**
+	 * The method that persists User object data to the database.
+	 * @param user - User object to be persisted.
+	 */
 	@Override
 	public User create(User user) {
 		Session session = sessionFactory.openSession();
@@ -47,6 +59,11 @@ public class UserDaoImpl implements UserDao {
 		return user;
 	}
 
+	/**
+	 * The method that retrieves all the persistent User objects from the 
+	 * database.
+	 * @return List of User objects from the database.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> read() {
@@ -69,6 +86,13 @@ public class UserDaoImpl implements UserDao {
 		return users;
 	}
 	
+	/**
+	 * The method that retrieves a list of persistent User objects from the 
+	 * database depending on offset and limit specified.
+	 * @param offset - index of the first record of the list to be returned.
+	 * @param limit - number of records to be returned.
+	 * @return List of User objects from the database.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> read(int offset, int limit) {
@@ -94,6 +118,12 @@ public class UserDaoImpl implements UserDao {
 		return users;
 	}
 
+	/**
+	 * The method that updates a specific persistent User object. 
+	 * @param user - User object to be updated.
+	 * @return int value that represents the affected database rows after 
+	 * the update.
+	 */
 	@Override
 	public int update(User user) {
 		Session session = sessionFactory.openSession();
@@ -124,6 +154,13 @@ public class UserDaoImpl implements UserDao {
 		return affectedRows;
 	}
 
+	/**
+	 * The method that deletes a specific persistent User object.
+	 * @param userId - Id of the User object to be deleted from the 
+	 * database.
+	 * @return int value that represent the affected database rows after 
+	 * the delete.
+	 */
 	@Override
 	public int delete(int userId) {
 		Session session = sessionFactory.openSession();
@@ -148,6 +185,13 @@ public class UserDaoImpl implements UserDao {
 		return affectedRows;
 	}
 
+	/**
+	 * The method that retrieves a specific persistent User object based 
+	 * on the id of the user.
+	 * @param userId - Id of the User object to be retrieved from the 
+	 * database.
+	 * @return User object from the database.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public User searchByUserId(int userId) {
@@ -173,6 +217,13 @@ public class UserDaoImpl implements UserDao {
 		return (users.size() > 0) ? users.get(0) : null;
 	}
 
+	/**
+	 * The method that retrieves a specific persistent User object based 
+	 * on the username of the user.
+	 * @param username - username of the User object to be retrieved from the 
+	 * database.
+	 * @return User object from the database.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public User searchByUsername(String username) {
@@ -198,6 +249,13 @@ public class UserDaoImpl implements UserDao {
 		return (users.size() > 0) ? users.get(0) : null;
 	}
 
+	/**
+	 * The method that retrieves a specific persistent User object based 
+	 * on the email address of the user.
+	 * @param userId - Id of the User object to be retrieved from the 
+	 * database.
+	 * @return User object from the database.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public User searchByEmailAddress(String emailAddress) {
@@ -223,6 +281,10 @@ public class UserDaoImpl implements UserDao {
 		return (users.size() > 0) ? users.get(0) : null;
 	}
 	
+	/**
+	 * A utility method that rolls back a Transaction object.
+	 * @param transaction - Transaction object to be rolled back.
+	 */
 	private void rollbackTx(Transaction transaction) {
 		if(transaction != null) {
 			transaction.rollback();

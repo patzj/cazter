@@ -53,7 +53,7 @@ public class ChannelDaoImpl implements ChannelDao {
 	}
 
 	/**
-	 * The method that retrieves all the persistent Database objects from the 
+	 * The method that retrieves all the persistent Channel objects from the 
 	 * database.
 	 * @return List of Channel objects from the database.
 	 */
@@ -174,7 +174,8 @@ public class ChannelDaoImpl implements ChannelDao {
 	}
 
 	/**
-	 * The method that retrieves a specific persistent Channel object.
+	 * The method that retrieves a specific persistent Channel object based 
+	 * on the id of the channel.
 	 * @param channelId - Id of the Channel object to be retrieved from the 
 	 * database.
 	 * @return Channel object from the database.
@@ -205,8 +206,8 @@ public class ChannelDaoImpl implements ChannelDao {
 
 	/**
 	 * The method that retrieves a list of persistent Channel objects based 
-	 * on the Id of the owner.
-	 * @param owerId - If of the Channel owner
+	 * on the id of the owner.
+	 * @param owerId - Id of the Channel owner
 	 * @return List of Channels owned by the specified owner.
 	 */
 	@SuppressWarnings("unchecked")

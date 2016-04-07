@@ -8,8 +8,8 @@ import org.cazter.api.dao.ChannelDaoImpl;
 import org.cazter.api.model.Channel;
 
 /**
- * The middle class between the ChannelResource and other clients, and the 
- * data access object.
+ * Service class that does the data routing and retrieval between clients and 
+ * Channel data access object.
  * @author patzj
  */
 public class ChannelService {
@@ -17,7 +17,7 @@ public class ChannelService {
 	private ChannelDao channelDao;
 	
 	/**
-	 * ChannelService object constructor that takes no arguments. The method 
+	 * ChannelService object constructor that takes no parameter. The method 
 	 * that instantiates the ChannelDao.
 	 */
 	public ChannelService() {
@@ -27,7 +27,7 @@ public class ChannelService {
 	/**
 	 * The service method that routes the Channel object to be persisted.
 	 * @param channel - Channel object to be persisted.
-	 * @return Persisted Channel object.
+	 * @return Persistent Channel object.
 	 */
 	public Channel create(Channel channel) {
 		Channel newChannel = channelDao.create(channel);
@@ -71,7 +71,7 @@ public class ChannelService {
 	}
 	
 	/**
-	 * The service method that routes the updates of the persistent Channel 
+	 * The service method that routes the updates of persistent Channel 
 	 * objects.
 	 * @param channel - Channel object to be updated.
 	 * @return int value that represents the affected database rows after 
@@ -106,7 +106,8 @@ public class ChannelService {
 	}
 	
 	/**
-	 * The service method that retrieves a specific persisted Channel object.
+	 * The service method that retrieves a specific persistent Channel object 
+	 * based on the id of the Channel.
 	 * @param channelId - Id of the Channel object to be retrieved from the 
 	 * database.
 	 * @return Channel object from the database.
@@ -122,9 +123,9 @@ public class ChannelService {
 	}
 	
 	/**
-	 * The service method that retrieves a list of persisted Channel objects based 
-	 * on the Id of the owner.
-	 * @param owerId - If of the Channel owner
+	 * The service method that retrieves a list of persistent Channel objects 
+	 * based on the id of the owner.
+	 * @param owerId - Id of the Channel owner
 	 * @return List of Channels owned by the specified owner.
 	 */
 	public List<Channel> searchByOwner(int ownerId) {
