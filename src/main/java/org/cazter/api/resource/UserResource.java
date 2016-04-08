@@ -19,7 +19,7 @@ import org.cazter.api.model.User;
 import org.cazter.api.service.UserService;
 
 /**
- * Resource class that handles User resource requests from clients.
+ * Class that handles User resource requests and response.
  * @author patzj
  */
 @Path("/users")
@@ -37,6 +37,13 @@ public class UserResource {
 		userService = new UserService();
 	}
 	
+	/**
+	 * The method that handles HTTP POST requests for User object persistence. 
+	 * Returns a Response with 500 status code on object persistence failure.
+	 * @param user - User object to be persisted.
+	 * @param uriInfo - Contains data of the request URI.
+	 * @return HTTP Response
+	 */
 	@POST
 	public Response create(User user, @Context UriInfo uriInfo) {
 		userService.create(user);
@@ -46,11 +53,26 @@ public class UserResource {
 		return Response.created(uri).build();
 	}
 	
+	/**
+	 * The method that handles HTTP GET requests for List of persistent User 
+	 * objects. Returns a response with 404 status code if no persistent User 
+	 * object exists.
+	 * @return List of User objects.
+	 */
 	@GET
 	public List<User> read() {
 		return userService.read();
 	}
 	
+	/**
+	 * The method that handles HTTP GET requests for List of persistent User 
+	 * objects. Returned results is based on the offset and limit specified 
+	 * in the URI. Returns a response owith 404 status code if the offset is 
+	 * greater than the total number of persistent User objects.
+	 * @param offset - index of the first record of the list to be returned.
+	 * @param limit - number of records to be returned.
+	 * @return List of User objects.
+	 */
 	@GET
 	@Path("/offset/{offset}/limit/{limit}")
 	public List<User> read(@PathParam("offset") int offset, 
@@ -59,24 +81,54 @@ public class UserResource {
 		return userService.read(offset, limit);
 	}
 	
+	/**
+	 * The method that handles HTTP GET requests for specific user. Returned 
+	 * results is based on the userId specified in the URI. Returns a Response 
+	 * with 404 status code if the User doesn't exist.
+	 * @param userId - Id of the User to be returned.
+	 * @return Persistent User object.
+	 */
 	@GET
 	@Path("/{userId}")
 	public User searchByUserId(@PathParam("userId") int userId) {
 		return userService.searchByUserId(userId);
 	}
 	
+	/**
+	 * The method that handles HTTP GET requests for specific user. Returned 
+	 * result is based on the username specified in the URI. Returns a Reponse 
+	 * with 404 status code if the User doesn't exists.
+	 * @param username - Username of the User to be returned.
+	 * @return Persistent User object.
+	 */
 	@GET
 	@Path("/username/{username}")
 	public User searchByUsername(@PathParam("username") String username) {
 		return userService.searchByUsername(username);
 	}
 	
+	/**
+	 * The method that handles HTTP GET requests for specific user. Returned 
+	 * result is base on the email address specified in the URI. Returns a 
+	 * Response with 404 status code if the User doesn't exists.
+	 * @param emailAddress - Email address of the User to be returned.
+	 * @return Persistent User object.
+	 */
 	@GET
 	@Path("/email/{emailAddress}")
 	public User searchByEmailAddress(@PathParam("emailAddress") String emailAddress) {
 		return userService.searchByEmailAddress(emailAddress);
 	}
 	
+	/**
+	 * The method that handles HTTP PUT requests for updates of persistent User 
+	 * objects. Returns a Response with 500 status code on persistent object 
+	 * update failure.
+	 * @param userId - Id of the user to be updated.
+	 * @param uriInfo - Contains data of the request URI.
+	 * @param user - User object with updated data.
+	 * @return HTTP Response.
+	 */
 	@PUT
 	@Path("/{userId}")
 	public Response update(@PathParam("userId") int userId, 
@@ -93,6 +145,13 @@ public class UserResource {
 				.build();
 	}
 	
+	/**
+	 * The method that handles HTTP DELETE requests for deletion of persistent 
+	 * User objects. Returns a Response with 500 status code on persistent 
+	 * object deletion failure.
+	 * @param userId - Id of the persistent User object to be deleted.
+	 * @return HTTP Response.
+	 */
 	@DELETE
 	@Path("/{userId}")
 	public Response delete(@PathParam("userId") int userId) {
