@@ -9,6 +9,11 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import org.cazter.api.model.HttpExceptionInfo;
 
+/**
+ * The class that handles the Response when NotFoundException exception 
+ * occurs.
+ * @author patzj
+ */
 @Provider
 public class NotFoundExceptionMapper 
 		implements ExceptionMapper<NotFoundException>{
@@ -16,6 +21,12 @@ public class NotFoundExceptionMapper
 	private final static Logger LOGGER 
 			= Logger.getLogger(NotFoundExceptionMapper.class.getName());
 	
+	/**
+	 * The method that generates the Response.
+	 * @param exception - NotFoundException object that contains data of the 
+	 * exception that occured.
+	 * @return HTTP Response.
+	 */
 	@Override
 	public Response toResponse(NotFoundException exception) {
 		HttpExceptionInfo httpExceptionInfo 

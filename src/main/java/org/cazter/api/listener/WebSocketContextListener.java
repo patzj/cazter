@@ -9,7 +9,6 @@ import org.cazter.api.model.Channel;
 import org.cazter.api.service.ChannelService;
 
 
-@SuppressWarnings("unused")
 public class WebSocketContextListener implements ServletContextListener {
 
 	@Override
@@ -20,7 +19,6 @@ public class WebSocketContextListener implements ServletContextListener {
 		ServerConfigurator.initOriginHeaders();
 		Server.initChannels();
 		
-		/*
 		ChannelService channelService = new ChannelService();
 		List<Channel> channels = channelService.read();
 		
@@ -28,12 +26,14 @@ public class WebSocketContextListener implements ServletContextListener {
 			Server.getChannels().put(channel.getId(), channel);
 			ServerConfigurator.getOriginHeaders().add(channel.getOrigin());
 		}
-		*/
+		
+		/*
 		Channel channel = new Channel();
 		channel.setId("1");
 		channel.setOwnerId(1);
 		channel.setOrigin("file://");
 		Server.getChannels().put(channel.getId(), channel);
 		ServerConfigurator.getOriginHeaders().add(channel.getOrigin());
+		*/
 	}
 }

@@ -9,6 +9,11 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import org.cazter.api.model.HttpExceptionInfo;
 
+/**
+ * The class that handles the Response when WebApplicationException exception 
+ * occurs.
+ * @author patzj
+ */
 @Provider
 public class WebApplicationExceptionMapper 
 		implements ExceptionMapper<WebApplicationException> {
@@ -16,6 +21,12 @@ public class WebApplicationExceptionMapper
 	private static final Logger LOGGER 
 			= Logger.getLogger(WebApplicationExceptionMapper.class.getName());
 	
+	/**
+	 * The method that generates the Response.
+	 * @param exception - WebApplicationException object that contains data of the 
+	 * exception that occured.
+	 * @return HTTP Response.
+	 */
 	@Override
 	public Response toResponse(WebApplicationException exception) {
 		HttpExceptionInfo httpExceptionInfo 

@@ -1,12 +1,7 @@
 package org.cazter.api.resource;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import javax.websocket.Session;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,10 +14,13 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import org.cazter.api.Server;
 import org.cazter.api.model.Channel;
 import org.cazter.api.service.ChannelService;
 
+/**
+ * The class that handles Channel resource requests and response.
+ * @author patzj
+ */
 @Path("/channels")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -30,10 +28,21 @@ public class ChannelResource {
 
 	ChannelService channelService;
 	
+	/**
+	 * ChannelResource object constructor that takes no parameters. This class 
+	 * initializes the channelService.
+	 */
 	public ChannelResource() {
 		channelService = new ChannelService();
 	}
 	
+	/**
+	 * The method that handles HTTP POST requests for Channel object persistence. 
+	 * Returns a Response with 500 status code on object persistence failure.
+	 * @param channel - Channel object to be persisted.
+	 * @param uriInfo - Contains data of the request URI.
+	 * @return HTTP Response.
+	 */
 	@POST
 	public Response create(Channel channel, @Context UriInfo uriInfo) {
 		channelService.create(channel);
@@ -43,37 +52,12 @@ public class ChannelResource {
 		return Response.created(uri).build();
 	}
 	
-	@GET
+	/**
+	 * The method that handles HTTP requests for live or running channels.
+	 */
 	@Path("/live")
-	public List<Channel> readLive() {
-		return new ArrayList<Channel>(Server.getChannels().values());
-	}
-	
-	@GET
-	@Path("/live/{channelId}/users")
-	public List<String> readLive(@PathParam("channelId") String channelId) {
-		Channel channel = Server.getChannels().get(channelId);
-		Map<String, Session> sessions = channel.getSessions();
-		Iterator<Entry<String, Session>> iterator 
-				= sessions.entrySet().iterator();
-		Session session;
-		String userId;
-		List<String> users = new ArrayList<String>();
-		
-		while(iterator.hasNext()) {
-			session = iterator.next().getValue();
-			userId = (String) session.getUserProperties().get("userId");
-			users.add(userId);
-		}
-		
-		return users;
-	}
-	
-	@GET
-	@Path("/live/{channelId}")
-	public Channel searchByIdLive(@PathParam("channelId") String channelId) {
-		
-		return Server.getChannels().get(channelId);
+	public LiveChannelResource readLive() {
+		return new LiveChannelResource();
 	}
 	
 	@GET

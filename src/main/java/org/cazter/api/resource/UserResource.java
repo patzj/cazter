@@ -19,7 +19,7 @@ import org.cazter.api.model.User;
 import org.cazter.api.service.UserService;
 
 /**
- * Class that handles User resource requests and response.
+ * The class that handles User resource requests and response.
  * @author patzj
  */
 @Path("/users")
@@ -31,7 +31,7 @@ public class UserResource {
 	
 	/**
 	 * UserResource object constructor that takes no parameters. This class 
-	 * initializes the UserSerice.
+	 * initializes the UserService.
 	 */
 	public UserResource() {
 		userService = new UserService();
@@ -42,7 +42,7 @@ public class UserResource {
 	 * Returns a Response with 500 status code on object persistence failure.
 	 * @param user - User object to be persisted.
 	 * @param uriInfo - Contains data of the request URI.
-	 * @return HTTP Response
+	 * @return HTTP Response.
 	 */
 	@POST
 	public Response create(User user, @Context UriInfo uriInfo) {
@@ -66,7 +66,7 @@ public class UserResource {
 	
 	/**
 	 * The method that handles HTTP GET requests for List of persistent User 
-	 * objects. Returned results is based on the offset and limit specified 
+	 * objects. Returned results are based on the offset and limit specified 
 	 * in the URI. Returns a response owith 404 status code if the offset is 
 	 * greater than the total number of persistent User objects.
 	 * @param offset - index of the first record of the list to be returned.
@@ -83,7 +83,7 @@ public class UserResource {
 	
 	/**
 	 * The method that handles HTTP GET requests for specific user. Returned 
-	 * results is based on the userId specified in the URI. Returns a Response 
+	 * result is based on the userId specified in the URI. Returns a Response 
 	 * with 404 status code if the User doesn't exist.
 	 * @param userId - Id of the User to be returned.
 	 * @return Persistent User object.
