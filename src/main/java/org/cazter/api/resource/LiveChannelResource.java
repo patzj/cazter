@@ -1,4 +1,5 @@
 package org.cazter.api.resource;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,8 @@ public class LiveChannelResource {
 			= Logger.getLogger(LiveChannelResource.class.getName());
 	/**
 	 * The method that handles HTTP GET requests for List of live channels.
+	 * @param filterBean - ChannelFilterBean that contains query parameters 
+	 * for filtering resource request results.
 	 * @return List of live Channel objects.
 	 */
 	@GET
@@ -60,7 +63,7 @@ public class LiveChannelResource {
 	 * The method that handles HTTP GET requests for specific channel. Returned 
 	 * result is based on the channelId specified in the URI.
 	 * @param channelId
-	 * @return
+	 * @return List of live Channel object.
 	 */
 	@GET
 	@Path("/{channelId}")
@@ -68,10 +71,24 @@ public class LiveChannelResource {
 		return Server.getChannels().get(channelId);
 	}
 	
+	/**
+	 * The method that do the processing of HTTP GET requests for list of live 
+	 * Channel objects.
+	 * @return List of live Channel objects.
+	 */
 	private List<Channel> read() {
 		return new ArrayList<Channel>(Server.getChannels().values());
 	}
 	
+	/**
+	 * The method that do the processing of HTTP GET requests for list of live 
+	 * Channel objects based on offset and limit specified. Returns a response 
+	 * with 404 status code if offset if greater than or equal to the total number 
+	 * of live Channel objects.
+	 * @param offset - index of the first record of the list to be returned.
+	 * @param limit - number of records to be returned.
+	 * @return List of live Channel objects.
+	 */
 	private List<Channel> read(int offset, int limit) {
 		ArrayList<Channel> channels 
 				= new ArrayList<Channel>(Server.getChannels().values());
@@ -92,6 +109,13 @@ public class LiveChannelResource {
 		}
 	}
 	
+	/**
+	 * The method that do the processing of HTTP GET requests for list of live 
+	 * Channel objects based on the id of the owner specified. Returns a Response 
+	 * with 404 status code if the Channel doesn't exists.
+	 * @param owner - Id of the Channel owner.
+	 * @return List of live Channel objects.
+	 */
 	private List<Channel> read(int owner) {
 		ArrayList<Channel> channels = new ArrayList<Channel>();
 		Iterator<Channel> iterator = Server.getChannels().values().iterator();

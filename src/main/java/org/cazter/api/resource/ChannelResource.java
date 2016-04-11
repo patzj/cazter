@@ -1,7 +1,9 @@
 package org.cazter.api.resource;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -10,6 +12,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -55,34 +58,84 @@ public class ChannelResource {
 	/**
 	 * The method that handles HTTP requests for live or running channels.
 	 */
-	@Path("/live")
+	@Path("/")
 	public LiveChannelResource readLive() {
 		return new LiveChannelResource();
 	}
 	
+	/**
+	 * The method that handles HTTP GET requests for List of persistent channels.
+	 * @param filterBean - ChannelFilterBean that contains query parameters 
+	 * for filtering resource request results.
+	 * @return List of persistent Channel objects.
+	 */
 	@GET
-	public List<Channel> read() {
+	public List<Channel> read(@BeanParam ChannelFilterBean filterBean) {
+		ArrayList<Channel> channels = new ArrayList<Channel>();
+		int offset = filterBean.getOffset();
+		int limit = filterBean.getLimit();
+		int owner = filterBean.getOwner();
+		
+		if(offset == 0 && limit == 0 && owner == 0) {
+			// Invokes the overloaded method with no parameters.
+			channels.addAll(read());
+		} else if(offset >= 0 && limit >= 0 && owner == 0) {
+			// Invokes the overloaded method with offset and limit parameters.
+			channels.addAll(read(offset, limit));
+		} else if(owner > 0) {
+			// Invokes the overloaded method with owner parameter
+			channels.addAll(read(owner));
+		} else {
+			throw new WebApplicationException();
+		}
+		
+		return channels;
+	}
+	
+	/**
+	 * The method that do the processing of HTTP GET requests for list of  
+	 * persistent Channel objects.
+	 * @return List of persistent Channel object.
+	 */
+	private List<Channel> read() {
 		return channelService.read();
 	}
 	
-	@GET
-	@Path("/offset/{offset}/limit/{limit}")
-	public List<Channel> read(@PathParam("offset") int offset, 
-			@PathParam("limit") int limit) {
-		
+	/**
+	 * The method that do the processing of HTTP GET requests for specific list 
+	 * of persistent Channel objects based on offset and limit specified. Returns 
+	 * a response with 404 status code if offset if greater than or equal to the 
+	 * total number of persistent Channel objects.
+	 * @param offset - index of the first record of the list to be returned.
+	 * @param limit - number of records to be returned.
+	 * @return List of persistent Channel objects.
+	 */
+	private List<Channel> read(int offset, int limit) {
 		return channelService.read(offset, limit);
 	}
 	
+	/**
+	 * The method that do the processing of HTTP GET requests for specific list 
+	 * of persistent Channel objects based on the id of the owner specified. Returns 
+	 * a Response with 404 status code if the Channel doesn't exists.
+	 * @param owner - Id of the Channel owner.
+	 * @return List of persistent Channel objects.
+	 */
+	private List<Channel> read(int owner) {
+		return channelService.searchByOwner(owner);
+	}
+
+	/**
+	 * The method that handles HTTP GET requests for specific channel. Returned 
+	 * result is based on the channelId specified in the URI.
+	 * @param channelId - Id of the Channel object to be retrieved from the 
+	 * database.
+	 * @return List of persistent Channel object.
+	 */
 	@GET
 	@Path("/{channelId}")
 	public Channel searchById(@PathParam("channelId") String channelId) {
 		return channelService.searchById(channelId);
-	}
-	
-	@GET
-	@Path("/owner/{ownerId}")
-	public List<Channel> searchByOwner(@PathParam("ownerId") int ownerId) {
-		return channelService.searchByOwner(ownerId);
 	}
 	
 	@PUT
