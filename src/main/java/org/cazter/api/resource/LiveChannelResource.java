@@ -30,33 +30,15 @@ public class LiveChannelResource {
 
 	private final static Logger LOGGER 
 			= Logger.getLogger(LiveChannelResource.class.getName());
+
 	/**
-	 * The method that handles HTTP GET requests for List of live channels.
-	 * @param filterBean - ChannelFilterBean that contains query parameters 
-	 * for filtering resource request results.
+	 * The method that handles HTTP GET requests for list of live 
+	 * Channel objects.
 	 * @return List of live Channel objects.
 	 */
 	@GET
-	public List<Channel> read(@BeanParam ChannelFilterBean filterBean) {
-		ArrayList<Channel> channels = new ArrayList<Channel>();
-		int offset = filterBean.getOffset();
-		int limit = filterBean.getLimit();
-		int owner = filterBean.getOwner();
-		
-		if(offset == 0 && limit == 0 && owner == 0) {
-			// Invokes the overloaded method with no parameters.
-			channels.addAll(read());
-		} else if(offset >= 0 && limit >= 0 && owner == 0) {
-			// Invokes the overloaded method with offset and limit parameters.
-			channels.addAll(read(offset, limit));
-		} else if(owner > 0) {
-			// Invokes the overloaded method with owner parameter
-			channels.addAll(read(owner));
-		} else {
-			throw new WebApplicationException();
-		}
-		
-		return channels;
+	public List<Channel> read() {
+		return new ArrayList<Channel>(Server.getChannels().values());
 	}
 	
 	/**
@@ -72,12 +54,30 @@ public class LiveChannelResource {
 	}
 	
 	/**
-	 * The method that do the processing of HTTP GET requests for list of live 
-	 * Channel objects.
+	 * The method that handles HTTP GET requests for List of live channels.
+	 * @param filterBean - ChannelFilterBean that contains query parameters 
+	 * for filtering resource request results.
 	 * @return List of live Channel objects.
 	 */
-	private List<Channel> read() {
-		return new ArrayList<Channel>(Server.getChannels().values());
+	@GET
+	@Path("/filter")
+	public List<Channel> read(@BeanParam ChannelFilterBean filterBean) {
+		ArrayList<Channel> channels = new ArrayList<Channel>();
+		int offset = filterBean.getOffset();
+		int limit = filterBean.getLimit();
+		int owner = filterBean.getOwner();
+		
+		if(offset >= 0 && limit >= 0 && owner == 0) {
+			// Invokes the overloaded method with offset and limit parameters.
+			channels.addAll(read(offset, limit));
+		} else if(owner > 0) {
+			// Invokes the overloaded method with owner parameter
+			channels.addAll(read(owner));
+		} else {
+			throw new WebApplicationException();
+		}
+		
+		return channels;
 	}
 	
 	/**

@@ -94,7 +94,7 @@ public class ChannelDaoImpl implements ChannelDao {
 		List<Channel> channels = null;
 		
 		try {
-			transaction = session.getTransaction();
+			transaction = session.beginTransaction();
 			channels = session.createQuery("FROM Channel")
 					.setFirstResult(offset)
 					.setMaxResults(limit)
@@ -219,7 +219,7 @@ public class ChannelDaoImpl implements ChannelDao {
 		
 		try {
 			transaction = session.beginTransaction();
-			channels = session.createQuery("FROM Channnel WHERE "
+			channels = session.createQuery("FROM Channel WHERE "
 					+ "ownerId = :ownerId")
 					.setInteger("ownerId", ownerId)
 					.setCacheable(true)

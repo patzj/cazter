@@ -56,9 +56,18 @@ public class ChannelResource {
 	}
 	
 	/**
+	 * The method that do the processing of HTTP GET requests for list of  
+	 * persistent Channel objects.
+	 * @return List of persistent Channel object.
+	 */
+	public List<Channel> read() {
+		return channelService.read();
+	}
+	
+	/**
 	 * The method that handles HTTP requests for live or running channels.
 	 */
-	@Path("/")
+	@Path("/live")
 	public LiveChannelResource readLive() {
 		return new LiveChannelResource();
 	}
@@ -70,16 +79,14 @@ public class ChannelResource {
 	 * @return List of persistent Channel objects.
 	 */
 	@GET
+	@Path("/filter")
 	public List<Channel> read(@BeanParam ChannelFilterBean filterBean) {
 		ArrayList<Channel> channels = new ArrayList<Channel>();
 		int offset = filterBean.getOffset();
 		int limit = filterBean.getLimit();
 		int owner = filterBean.getOwner();
 		
-		if(offset == 0 && limit == 0 && owner == 0) {
-			// Invokes the overloaded method with no parameters.
-			channels.addAll(read());
-		} else if(offset >= 0 && limit >= 0 && owner == 0) {
+		if(offset >= 0 && limit >= 0 && owner == 0) {
 			// Invokes the overloaded method with offset and limit parameters.
 			channels.addAll(read(offset, limit));
 		} else if(owner > 0) {
@@ -90,15 +97,6 @@ public class ChannelResource {
 		}
 		
 		return channels;
-	}
-	
-	/**
-	 * The method that do the processing of HTTP GET requests for list of  
-	 * persistent Channel objects.
-	 * @return List of persistent Channel object.
-	 */
-	private List<Channel> read() {
-		return channelService.read();
 	}
 	
 	/**
